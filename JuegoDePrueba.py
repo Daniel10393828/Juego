@@ -1,6 +1,7 @@
 import pygame
 import random
 import sys
+import turtle
 
 pygame.init()
 
@@ -66,9 +67,35 @@ def menu():
 #     FUNCIÓN: NUEVO JUEGO
 # ============================
 def juego_cuadrado():
+    maze = [
+    "011111111111111111111111111111",
+    "000000000000000000000000000001",
+    "111101010011000000000011111101",
+    "011001010010100000001110000001",
+    "000001010010100000110010110001",
+    "111101010010100001100001010011",
+    "100001010010100010000011100101",
+    "101111010010111100000000000001",
+    "000000010010000000001111111101",
+    "100101110011110000000000000001",
+    "100100000000010001111110001111",
+    "100111111111110000000001000001",
+    "100100000000000000000000100001",
+    "100000111111100000000000100001",
+    "100001000000000000000000010001",
+    "100110000000100100000000010001",
+    "100011111000101111110000010001",
+    "100011010011101000001000010001",
+    "111110010010001111100100010001",
+    "100000010010000000100010000001",
+    "101111110011111110111001000001",
+    "100000000000000010000000000001",
+    "111111111111111011111111111111"
+    ]
     x = 0
     y = 0
     tam = 30
+    tam2 = 50
     vel_x = 1/3
     vel_y = 1/3
     rojo_x = 800 - tam
@@ -92,27 +119,17 @@ def juego_cuadrado():
 
         # Límites de la pantalla
         if y < 0: y = 0
-        if y > 600 - tam: y = 600 - tam
+        if y > ALTO - tam: y = ALTO - tam
         if x < 0: x = 0
-        if x > 800 - tam: x = 800 - tam
+        if x > ANCHO - tam: x = ANCHO - tam
 
         # Rectángulos del juego
         rect_azul  = pygame.Rect(x, y, tam, tam)
         rect_rojo  = pygame.Rect(rojo_x, rojo_y, tam, tam)
 
-        rect_blanco2 = pygame.Rect(tam, 0, 20, 200)
-        rect_blanco3 = pygame.Rect(tam, 210 + tam, 20, 200)
-        rect_blanco4 = pygame.Rect(tam, 420 + tam*2, 20, 100 - tam + 12)
-        rect_blanco5 = pygame.Rect(tam*3, 0+tam, 20, 100)
         # Lista de paredes (IMPORTANTE)
-        paredes = [rect_blanco2, rect_blanco3, rect_blanco4, rect_blanco5]
 
-        # --- COLISIÓN CON PAREDES ---
-        for p in paredes:
-            if rect_azul.colliderect(p):
-                x, y = old_x, old_y   # volver atrás
-                rect_azul.x = x
-                rect_azul.y = y
+        # --- COLISIÓN CON PAREDES
 
         # --- COLISIÓN CON META ---
         if rect_azul.colliderect(rect_rojo):
@@ -127,10 +144,15 @@ def juego_cuadrado():
         pantalla.fill(NEGRO)
         pygame.draw.rect(pantalla, AZUL, rect_azul)
         pygame.draw.rect(pantalla, ROJO, rect_rojo)
-        pygame.draw.rect(pantalla, BLANCO, rect_blanco2)
-        pygame.draw.rect(pantalla, BLANCO, rect_blanco3)
-        pygame.draw.rect(pantalla, BLANCO, rect_blanco4)
-        pygame.draw.rect(pantalla, BLANCO, rect_blanco5)
+        for fila in range(len(maze)):
+            for col in range(len(maze[fila])):
+                if maze[fila][col] == "1":
+                    rect_verde  = pygame.Rect(col * tam, fila * tam, tam, tam)
+                    pygame.draw.rect(pantalla,(0,255,0), rect_verde)
+                    if rect_azul.colliderect(rect_verde):
+                        x = old_x
+                        y = old_y
+
         pygame.display.update()
 # ============================
 #     FUNCIÓN: JUEGO PONG
