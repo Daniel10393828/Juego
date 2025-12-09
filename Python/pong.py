@@ -1,5 +1,5 @@
 import pygame
-from ..setting import *
+from setting import *
 
 def juego(pantalla):
     ancho = 25
